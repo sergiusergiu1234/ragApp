@@ -33,15 +33,16 @@ const Messagelist = ({conversationId, selectedDocumentsId}:MessageListProps) =>{
         if (text.trim() === "") return ;
 
         try {
+          setMessages(prev => [
+            ...(prev ?? []),
+            {
+              id: -1,
+              text: text,
+              role: 'user'
+            }
+          ]);
             await createMessage(text, llmId, selectedDocumentsId, conversationId);
-            setMessages(prev => [
-              ...(prev ?? []),
-              {
-                id: -1,
-                text: text,
-                role: 'user'
-              }
-            ]);
+            
             setText(""); // Clear input after submit
         } catch (error) {
             // Error is already handled in the hook, just log for debugging
@@ -65,10 +66,8 @@ const Messagelist = ({conversationId, selectedDocumentsId}:MessageListProps) =>{
         return (
             <div className="flex flex-col h-full w-full bg-white rounded-2xl shadow-lg relative">
                 <div className="flex-1 flex items-center justify-center p-8">
-                    <Error 
-                        message="Failed to load conversation. Please try again." 
-                        onRetry={() => window.location.reload()}
-                    />
+                  Fail
+                    <div/>
                 </div>
             </div>
         );

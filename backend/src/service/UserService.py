@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from typing import Annotated
 
@@ -31,3 +30,11 @@ class UserService:
         deleted = self.__userRepository.deleteById(id)
        
         return deleted
+    
+    def acceptTerms(self, id: int):
+        user = self.__userRepository.getById(id)
+        if user:
+            user.acceptedTerms = True
+            updated_user = self.__userRepository.update(id, user)
+            return updated_user
+        return None

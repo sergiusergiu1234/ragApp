@@ -41,7 +41,7 @@ async def get_current_user(userRepository: Annotated[UserRepository, Depends()],
             raise UnauthorizedException(str(error))
         existingUser = userRepository.getByAuthSub(payload['sub'])
         if existingUser is None:
-            existingUser =  userRepository.create(User(username=payload['email'],oauthId=payload['sub'], dateCreated=datetime.now()))
+            existingUser =  userRepository.create(User(oauthId=payload['sub'], dateCreated=datetime.now(), acceptedTerms=False))
         # Optional: Check for required scopes/permissions
         if security_scopes.scopes:
             permissions: List[str] = payload.get('permissions', [])

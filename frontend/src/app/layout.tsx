@@ -1,8 +1,8 @@
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Auth0Provider, useUser } from "@auth0/nextjs-auth0";
+import { Footer } from "@/components/ui/footer";
+import Auth0ProviderWrapper from "@/components/Auth0ProviderWrapper";
 
 export default function RootLayout({
   children,
@@ -12,13 +12,13 @@ export default function RootLayout({
   
   return (
     <html lang="en">
-      <body
-        
-      >
-        <Auth0Provider>
-        
-        {children}
-        </Auth0Provider>
+      <body className="min-h-screen flex flex-col">
+        <Auth0ProviderWrapper>
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </Auth0ProviderWrapper>
       </body>
     </html>
   );

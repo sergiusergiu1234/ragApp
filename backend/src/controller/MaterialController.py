@@ -39,3 +39,4 @@ async def indexFiles(serviceFactory: Annotated[IndexingServiceFactory, Depends()
         responses.append(response)
 
     return response
+

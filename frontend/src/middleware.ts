@@ -10,7 +10,9 @@ export async function middleware(request:any) {
     }
 
     // public routes — no need to check for session
-    if (request.nextUrl.pathname === ("/")) {
+    if (request.nextUrl.pathname === "/" || 
+        request.nextUrl.pathname === "/privacy" || 
+        request.nextUrl.pathname === "/terms") {
         return authRes;
     }
 
