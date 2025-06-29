@@ -1,0 +1,22 @@
+services:
+  tika:
+    image: apache/tika:latest
+    container_name: tika_${POSTGRES_DB}
+    ports:
+      - "${TIKAPORT}:9998"
+
+  postgres:
+    image: postgres:latest
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata_ragdemo:/var/lib/postgresql/data
+volumes:
+  pgdata_ragdemo:
+
+  
