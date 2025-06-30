@@ -6,7 +6,7 @@ export interface DocumentCardProps extends Document{
 }
 
 const DocumentCard = ({id,name,dateCreated,userId}:DocumentCardProps) =>{
-    const { removeDocument} = useDocuments(userId)
+    const { removeDocument} = useDocuments()
 
 
     return <div>

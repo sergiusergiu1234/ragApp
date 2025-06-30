@@ -1,41 +1,19 @@
-import { NextResponse } from "next/server";
-import { auth0 } from "./lib/auth0"
+import type { NextRequest } from "next/server"
 
-export async function middleware(request:any) {
-    const authRes = await auth0.middleware(request);
+import { auth0 } from "./lib/auth0" // Adjust path if your auth0 client is elsewhere
 
-    // authentication routes — let the middleware handle it
-    if (request.nextUrl.pathname.startsWith("/auth")) {
-        return authRes;
-    }
-
-    // public routes — no need to check for session
-    if (request.nextUrl.pathname === "/" || 
-        request.nextUrl.pathname === "/privacy" || 
-        request.nextUrl.pathname === "/terms") {
-        return authRes;
-    }
-
-    const { origin } = new URL(request.url)
-    const session = await auth0.getSession()
-
-    // user does not have a session — redirect to login
-    if (!session) {
-        return NextResponse.redirect(`${origin}/auth/login`)
-    }
-
-    return authRes
+export async function middleware(request: NextRequest) {
+  return await auth0.middleware(request) // Returns a NextResponse object
 }
 
 export const config = {
-    matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-         * - api (API routes)
-         */
-        "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|api).*)",
-    ],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     */
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+  ],
 }
