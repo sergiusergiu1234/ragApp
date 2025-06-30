@@ -1,6 +1,7 @@
 import { fetcher } from "@/lib/fetcher"
 import useSWR from "swr"
 import { useState, useEffect } from "react"
+import { env } from "process"
 
 export type InternalUser ={
     id: number,
@@ -63,7 +64,7 @@ export const useInternalUser = (userSub: string | undefined)=>{
             
             // Try to update database (only if user is logged in and exists)
             if (userSub && internalUser) {
-                const response = await fetch(`/api/user/${userSub}/accept-terms`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/${userSub}/accept-terms`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

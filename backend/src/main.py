@@ -37,3 +37,11 @@ app.include_router(router=ConversationController.conversationController)
 app.include_router(router = MaterialController.materialController)
 app.include_router(router= UserController.userController)
 app.include_router(router = GeneratorController.generatorController)
+
+app.add_middleware(
+      CORSMiddleware,
+      allow_origins=["https://rag-app-topaz.vercel.app"],
+      allow_credentials=True,
+      allow_methods=["*"],
+      allow_headers=["*"],
+  )

@@ -31,7 +31,7 @@ export const useConversations = () => {
     )
 
     const createConversation = async (title: string) => {
-        const newConversation = await fetch(`http://localhost:3000/api/conversation`, 
+        const newConversation = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/conversation`, 
            { method : 'POST',
             body: JSON.stringify({
                 "conversationTitle": title
