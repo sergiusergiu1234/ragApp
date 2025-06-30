@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ conv
         console.log(token)
         const { conversationId } = await params
         console.log(conversationId)
-        const backendRes = await fetch(`http://localhost:8000/conversation/${conversationId}`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversation/${conversationId}`, {
           method: 'GET',
           headers: {
            "Authorization": `Bearer ${token.token}`

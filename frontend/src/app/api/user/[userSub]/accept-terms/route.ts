@@ -6,7 +6,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ use
         const token = await auth0.getAccessToken()
         const { userSub } = await params
         
-        const backendRes = await fetch(`http://localhost:8000/user/${userSub}/accept-terms`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${userSub}/accept-terms`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

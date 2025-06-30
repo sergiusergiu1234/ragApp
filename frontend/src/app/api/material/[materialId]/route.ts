@@ -6,7 +6,7 @@ export async function DELETE(req: NextRequest,  { params }: { params: Promise<{ 
     try {
         const token = await auth0.getAccessToken()
         const { materialId } = await params
-        const backendRes = await fetch(`http://localhost:8000/material/${materialId}`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/material/${materialId}`, {
           method: 'DELETE',
           headers: {
             "Authorization": `Bearer ${token.token}`

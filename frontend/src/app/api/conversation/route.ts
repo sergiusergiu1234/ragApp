@@ -5,7 +5,7 @@ export async function GET(req: NextRequest, context: {params: { conversationId: 
     try {
         const token = await auth0.getAccessToken()
         console.log(token)
-        const backendRes = await fetch(`http://localhost:8000/conversation`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversation`, {
           method: 'GET',
           headers: {
            "Authorization": `Bearer ${token.token}`
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const token = await auth0.getAccessToken()
         console.log(token)
-        const backendRes = await fetch(`http://localhost:8000/conversation?conversationTitle=${body.conversationTitle}`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversation?conversationTitle=${body.conversationTitle}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json',
             "Authorization": `Bearer ${token.token}`

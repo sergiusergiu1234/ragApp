@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const token = await auth0.getAccessToken()
         console.log(token)
-        const backendRes = await fetch(`http://localhost:8000/chat`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json',
             "Authorization": `Bearer ${token.token}`

@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import APIRouter, Path, Query
 from fastapi import Depends
+from model.exceptions.UnauthorizedException import UnauthorizedException
 from model.User import User
 from service.Security.Auth0SecurityService import get_current_user
 from service.UserService import UserService
-from fastapi import UnauthorizedException
 
 
 userController = APIRouter(tags=['User'])

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         const token = await auth0.getAccessToken()
-        const backendRes = await fetch(`http://localhost:8000/material`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/material`, {
           method: 'GET',
           headers: {
            "Authorization": `Bearer ${token.token}`
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.formData()
         const token = await auth0.getAccessToken()
-        const backendRes = await fetch(`http://localhost:8000/material`, {
+        const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/material`, {
           method: 'POST',
           headers: {
             "Authorization": `Bearer ${token.token}`
