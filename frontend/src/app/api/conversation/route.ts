@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         const token = await auth0.getAccessToken()
-        console.log(token)
+        // console.log(token)
         const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversation`, {
           method: 'GET',
           headers: {
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const token = await auth0.getAccessToken()
-        console.log(token)
+        // console.log(token)
         // If conversationId is present, fetch a single conversation
         if (body.conversationId) {
             const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversation/${body.conversationId}`, {

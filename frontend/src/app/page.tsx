@@ -1,27 +1,60 @@
 'use client'
-
+import { FcGoogle } from "react-icons/fc";
 import ConversationList from "@/components/composite/ConversationList";
 import DocumentsList from "@/components/composite/DocumentsList";
+import MessageInput from "@/components/composite/MessageInput";
 import MessageList from "@/components/composite/MessageList";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TermsRequired } from "@/components/ui/terms-required";
+import { useConversation, useConversations } from "@/hooks/useConversations";
 import { useInternalUser } from "@/hooks/useInternalUser";
+import { Message, useMessages } from "@/hooks/useMessages";
 import { useUser } from "@auth0/nextjs-auth0";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null)
   const [selectedDocumentsId, setSelectedDocumentsId] = useState<number[]>([])
   const { user } = useUser();
-  const { internalUser, removeInternalUser, acceptTerms, hasAcceptedTerms } = useInternalUser(user?.sub)
-
+  const { acceptTerms, hasAcceptedTerms } = useInternalUser(user?.sub)
+  const { createConversation } = useConversations();
+  const { createMessage, isUploading } = useMessages(selectedConversationId);
   const handleSelectConversation = (conversationId: number)=>{
     setSelectedConversationId(conversationId)
   }
+  const {conversation, isError: conversationError, isLoading: conversationLoading} = useConversation(selectedConversationId)
+  const [messages, setMessages] = useState<Message[] | undefined>(conversation?.pgmessages)
+  const [pendingMessage, setPendingMessage] = useState<Map<number,Message> | null>(null);
+  
+  useEffect(()=>{
+      setMessages(conversation?.pgmessages)
+  },[conversation])
 
+  const mergedMessages = [
+    ...(messages ?? []),
+    ...(selectedConversationId !== null && pendingMessage?.get(selectedConversationId) ? [pendingMessage.get(selectedConversationId)!] : [])
+  ];
 
-
+  const handleSendMessage = async (message: string) => {
+    let conversationId = selectedConversationId;
+    if (!conversationId) {
+      const newConversation = await createConversation("New Conversation");
+      conversationId = newConversation.id;
+      const newPending = new Map(pendingMessage);
+      conversationId && newPending.set(conversationId, { id: -1, text: message, role: 'user' });
+      setPendingMessage(newPending);
+      setSelectedConversationId(conversationId);
+      conversationId && await createMessage(message, 2, selectedDocumentsId, conversationId);
+      setPendingMessage(null);
+    } else {
+      const newPending = new Map(pendingMessage);
+      conversationId && newPending.set(conversationId, { id: -1, text: message, role: 'user' });
+      setPendingMessage(newPending);
+      await createMessage(message, 2, selectedDocumentsId, conversationId);
+      setPendingMessage(null);
+    }
+  };
   return (<>
  {hasAcceptedTerms() ? <div className="flex flex-col bg-gradient-to-br from-gray-100 to-gray-300 min-h-screen relative">
      
@@ -35,7 +68,7 @@ export default function Home() {
          </>
        ) : (
          <Button asChild variant="outline">
-           <a href="/auth/login">Log in</a>
+           <a href="/auth/login"><FcGoogle />Log in</a>
          </Button>
        )}
      </div>
@@ -57,10 +90,10 @@ export default function Home() {
          <div className="flex-1 flex flex-col items-center justify-center h-full">
            <div className="flex-1 w-full flex flex-col items-center justify-center h-full">
              {selectedConversationId ? (
-               <div className="w-full h-full flex flex-col items-center justify-center">
+               <div className="w-full h-[80%] flex flex-col items-center justify-center">
                  {/* Make MessageList scrollable and fill available space */}
                  <div className="flex-1 w-full overflow-y-auto px-8 py-6">
-                   <MessageList selectedDocumentsId={selectedDocumentsId} conversationId={selectedConversationId} />
+                   <MessageList isUploading={isUploading } messages={mergedMessages} />
                  </div>
                </div>
              ) : (
@@ -68,9 +101,17 @@ export default function Home() {
                  <label className="text-4xl font-semibold text-gray-700 mb-8">
                    Welcome {user ? (user.given_name || user.email) : "friend"}. Try the chat.
                  </label>
+                 {!user && <label className="text-2xl font-semibold text-gray-700 mb-8">
+                  <Button asChild variant="outline">
+                    <a href="/auth/login"><FcGoogle />Login</a>
+                  </Button> to use the chat 
+                 </label>}
+                 
                </div>
              )}
+              <MessageInput notLoggedIn={ user == null} onSend={handleSendMessage} isUploading={isUploading} />
            </div>
+           
          </div>
        </div>
      </div>

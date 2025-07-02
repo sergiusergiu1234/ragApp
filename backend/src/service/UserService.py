@@ -17,8 +17,8 @@ class UserService:
         Users = self.__userRepository.getAll()
         return Users
     
-    def addOne(self, oauthId: int, username: str):
-        user = self.__userRepository.create(User(username=username,oauthId=oauthId, dateCreated = datetime.now()) )
+    def addOne(self, oauthId: int):
+        user = self.__userRepository.create(User(oauthId=oauthId, dateCreated = datetime.now()) )
         return user
     def getById(self, id: int):
         user = self.__userRepository.getById(id)
@@ -38,3 +38,6 @@ class UserService:
             updated_user = self.__userRepository.update(id, user)
             return updated_user
         return None
+    
+    def getByOauthId(self, oauthId: str):
+        user = self.__userRepository.getByAuthSub(oauthId)

@@ -4,6 +4,8 @@ import { Button } from "../ui/button"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
+import { randomInt } from "crypto"
+import RenameConversationComponent from "./RenameConversationComponent"
 
 export interface ConversationListProps {
     selectedConversationId: number | null
@@ -13,14 +15,7 @@ export interface ConversationListProps {
 const ConversationList = ({selectedConversationId,handleSelectConversation}: ConversationListProps) =>{
     const {user} = useUser()
     const { conversations, isLoading, createConversation } = useConversations()
-    
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-full ">
-                <div className="text-gray-500">Loading conversations...</div>
-            </div>
-        )
-    }
+    const [renamingId, setRenamingId] = useState<number | null >(null)
     const handleCreateConversation = async () =>{
         await createConversation("newChat")
     }
@@ -59,8 +54,18 @@ const ConversationList = ({selectedConversationId,handleSelectConversation}: Con
                     <p>you must log in to use this feature </p>
                 </TooltipContent>
             </Tooltip>
-            
-            
+
+           {user ? <>
+            {renamingId !== null && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+                    <div className="bg-white rounded-2xl shadow-xl p-6">
+                    <RenameConversationComponent
+                        conversationId={renamingId}
+                        onDone={() => setRenamingId(null)}
+                    />
+                    </div>
+                </div>
+                )}
             {/* Conversations List */}
             <div className="flex-1 space-y-2 min-h-0">
                 {conversations && conversations.map((c) => (
@@ -70,21 +75,24 @@ const ConversationList = ({selectedConversationId,handleSelectConversation}: Con
                         className="cursor-pointer transition-all hover:scale-[1.02] w-full"
                     >
                         <ConversationCard 
+                        onRename={() => setRenamingId(c.id)}
                             key={c.id} 
                             id={c.id} 
                             title={c.title} 
-                            pgmessages={c.pgmessages} 
                             isSelected={c.id === selectedConversationId}
                         />
                     </div>
                 ))}
                 
-                {(!conversations || conversations.length === 0) && (
+                { user && (!conversations || conversations.length === 0) && (
                     <div className="text-center text-gray-500 py-8">
                         No conversations yet
                     </div>
                 )}
-            </div>
+            </div></> : <>
+            {/* <ConversationCard isSelected={true} title={"Temporary Chat"} id={5}/> */}
+            </>}
+           
         </div>
     )
 }

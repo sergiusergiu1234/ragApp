@@ -18,9 +18,10 @@ def postConversation(conversationService: Annotated[ConversationService, Depends
 @conversationController.get("/conversation")
 def getConversations(conversationService:Annotated[ConversationService, Depends()],
                      user: Annotated[User, Depends(get_current_user)]):
-   
+    if user.oauthId == "9999":
+         return []
     conversations = conversationService.getByUserId(user.id)
-    
+
     return conversations
 
 
@@ -46,9 +47,20 @@ def getConversationById(conversationService: Annotated[ConversationService, Depe
 def deleteConversationById(conversationService: Annotated[ConversationService, Depends()],
                            id: Annotated[int, Path(...)],
                            user: Annotated[User, Depends(get_current_user)]):
-    allowedConversations  = conversationService.getByUserId(user.id)
-    if id in allowedConversations:
+    allowedConversations = conversationService.getByUserId(user.id)
+    allowedConversationIds = [c.id for c in allowedConversations]
+    print(f"Trying to deltee {id}")
+    if id in allowedConversationIds:
         deleted  = conversationService.deleteById(id)
         return deleted
     else:
-                raise UnauthorizedException(detail=f"Forbidden conversation. ConversationId: {id}.")
+        raise UnauthorizedException(detail=f"Forbidden conversation. ConversationId: {id}.")
+
+
+@conversationController.post("/conversation/{id}/rename")
+def renameConversation(conversationService: Annotated[ConversationService, Depends()],
+                           id: Annotated[int, Path(...)],
+                           user: Annotated[User, Depends(get_current_user)],
+                           newName: Annotated[str, Query(...)]):
+    newConversation = conversationService.updateName(conversationId=id, newName=newName)
+    return newConversation

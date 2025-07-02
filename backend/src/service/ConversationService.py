@@ -14,6 +14,8 @@ class ConversationService:
         conversation = self.__conversationRepository.createOne(Conversation(title=title,userId=userId))
         return conversation
         
+
+
     def getAll(self):
         conversations = self.__conversationRepository.getAll()
         return conversations

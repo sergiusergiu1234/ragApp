@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const token = await auth0.getAccessToken()
-        console.log(token)
+        // console.log(token)
         const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json',

@@ -29,7 +29,16 @@ export const useConversations = () => {
         '/api/conversation',
         fetcher
     )
-
+    const updateConversationName = async (newName: string, conversationId: number) =>{
+        const newConversation = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/conversation/${conversationId}/updateName`, 
+            { method : 'POST',
+             body: JSON.stringify({
+                 "newName": newName
+         })})
+         await mutate() 
+        const response = await newConversation.json()
+        return response
+    }
     const createConversation = async (title: string) => {
         const newConversation = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/conversation`, 
            { method : 'POST',
@@ -37,8 +46,16 @@ export const useConversations = () => {
                 "conversationTitle": title
         })})
         await mutate() 
-        return newConversation
-        
+        const response = await newConversation.json()
+        return response
+    }
+
+    const deleteConversation = async(conversationId:number) =>{
+        const deletedConversation = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/conversation/${conversationId}`, 
+            { method : 'DELETE'})
+         await mutate() 
+         const response = await deletedConversation.json()
+         return response
     }
 
 
@@ -47,11 +64,13 @@ export const useConversations = () => {
         isLoading,
         isError: error,
         createConversation,
+        updateConversationName,
+        deleteConversation
     }
 }
 
 // Hook for single conversation
-export const useConversation = (id: number) => {
+export const useConversation = (id: number | null) => {
     const {
         data: conversation,
         error,

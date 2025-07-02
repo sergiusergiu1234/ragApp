@@ -23,8 +23,8 @@ def getUsers(service: userServiceDep, id: Annotated[int, Path(...)],
         return user
 
 @userController.post("/user")
-def postUser(service: userServiceDep, authId: Annotated[int, Query(...)], username: Annotated[str, Query(...)]):
-    user = service.addOne(oauthId=authId, username=username)
+def postUser(service: userServiceDep, authId: Annotated[int, Query(...)]):
+    user = service.addOne(oauthId=authId)
     return user 
 
 @userController.post("/user/{userSub}/accept-terms")

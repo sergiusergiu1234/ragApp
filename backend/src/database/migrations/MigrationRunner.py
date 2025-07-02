@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session, sessionmaker
+from database.migrations.DefaultUserMigration import DefaultUserMigration
 from database.migrations.DefaultModelsMigration import DefaultModelsMigration
 from repository.PostgresSessionFactory import PostgresSessionFactory
 
@@ -16,6 +17,8 @@ class MigrationRunner:
             # Run default models migration
             default_models_migration = DefaultModelsMigration(session)
             default_models_migration.run()
+            deafult_user_migration = DefaultUserMigration(session)
+            deafult_user_migration.run()
             session.commit()
             print("All migrations completed successfully.")
         except Exception as e:

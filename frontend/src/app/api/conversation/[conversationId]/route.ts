@@ -22,3 +22,23 @@ export async function GET(req: NextRequest,  { params }: { params: Promise<{ con
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }
 }
+
+
+export async function DELETE(req: NextRequest,  { params }: { params: Promise<{ conversationId: string }> }){
+  try {
+      const token = await auth0.getAccessToken()
+      const { conversationId } = await params
+      const backendRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversation/${conversationId}`, {
+        method: 'DELETE',
+        headers: {
+          "Authorization": `Bearer ${token.token}`
+        }
+      });
+      const data = await backendRes.json();
+      return NextResponse.json(data);
+
+  } catch (error) {
+      console.log(error)
+      return NextResponse.json({ error: "Error" }, { status: 500 });
+  }
+}

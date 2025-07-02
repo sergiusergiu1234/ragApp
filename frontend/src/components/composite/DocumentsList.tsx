@@ -42,7 +42,7 @@ const DocumentsList = ({setSelectedDocuments,selectedDocuments}:DocumentsListPro
             
             {/* Documents List */}
             <div className="flex-1 overflow-y-auto space-y-3">
-                {isLoading ? <>Loading documents <Loader/></>: <> {documents ? documents.map((d) => (
+                {user && isLoading ? <>Loading documents <Loader/></>: <> {documents ? documents.map((d) => (
                     <div key={d.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                         <input 
                             type="checkbox"

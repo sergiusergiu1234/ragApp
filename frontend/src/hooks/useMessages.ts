@@ -34,6 +34,7 @@ export const useMessages = (conversationId:number | null) =>{
         setUploadError(null)
         
         try {
+            
             const response = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/chat`, {
                 method: 'POST', 
                 headers: {
