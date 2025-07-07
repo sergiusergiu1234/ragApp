@@ -23,12 +23,12 @@ const MainChatArea = ({user, selectedConversationId, isUploading, mergedMessages
           <label className="text-xl font-semibold text-gray-700 mb-8 sm:text-4xl">
             Welcome. {user ? (user.given_name || user.email) : ""} Try the chat.
           </label>
-          <Button asChild variant="outline">
+          {!user && <Button asChild variant="outline">
                     <a href="/auth/login">
                       <FcGoogle />
                       Log in
                     </a>
-                  </Button>
+                  </Button>}
         </div>
       )}
     </div>
