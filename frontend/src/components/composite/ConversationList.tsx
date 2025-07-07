@@ -6,7 +6,7 @@ import { useUser } from "@auth0/nextjs-auth0"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 import { randomInt } from "crypto"
 import RenameConversationComponent from "./RenameConversationComponent"
-
+import { Sidebar, SidebarTrigger } from "../ui/sidebar"
 export interface ConversationListProps {
     selectedConversationId: number | null
     handleSelectConversation: (conversationId: number) => void
@@ -27,7 +27,6 @@ const ConversationList = ({selectedConversationId,handleSelectConversation}: Con
             {/* New Chat Button */}
             <Tooltip>
                 {user ? (
-                    
                         <Button
                             disabled={false}
                             onClick={handleCreateConversation}
@@ -35,7 +34,6 @@ const ConversationList = ({selectedConversationId,handleSelectConversation}: Con
                         >
                             New chat
                         </Button>
-                    
                 ) : (
                     <TooltipTrigger asChild>
                         <span className="w-full block hover:cursor-not-allowed">
@@ -67,6 +65,7 @@ const ConversationList = ({selectedConversationId,handleSelectConversation}: Con
                 </div>
                 )}
             {/* Conversations List */}
+            
             <div className="flex-1 space-y-2 min-h-0">
                 {conversations && conversations.map((c) => (
                     <div 
@@ -90,10 +89,10 @@ const ConversationList = ({selectedConversationId,handleSelectConversation}: Con
                     </div>
                 )}
             </div></> : <>
-            {/* <ConversationCard isSelected={true} title={"Temporary Chat"} id={5}/> */}
             </>}
            
         </div>
+  
     )
 }
 

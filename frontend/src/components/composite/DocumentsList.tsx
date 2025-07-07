@@ -14,25 +14,24 @@ export interface DocumentsListProps {
     selectedDocuments: number[]
 }
 
-
 const DocumentsList = ({setSelectedDocuments,selectedDocuments}:DocumentsListProps) =>{
     const { user } = useUser();
     const {documents, createDocuments, isLoading} = useDocuments()
     const [documentState, setDocumentState] = useState<File[] | []>([])
     const [isUploading, setIsUploading] = useState<boolean>(false)
-
+    
     const handleSubmit = (e: React.FormEvent) =>{
         e.preventDefault();
         setIsUploading(true)
         const newDocuments =  createDocuments(documentState) 
-        
+        setDocumentState([])
     }
     useEffect(()=>{
         setIsUploading(false)
     },[documents])
     
     return (
-        <div className="flex flex-col h-full bg-white rounded-2xl shadow-lg p-6 space-y-6">
+        <div className="flex flex-col h-full p-6">
             {/* Header */}
         
             <div className="border-b pb-4">
@@ -41,7 +40,7 @@ const DocumentsList = ({setSelectedDocuments,selectedDocuments}:DocumentsListPro
             </div>
             
             {/* Documents List */}
-            <div className="flex-1 overflow-y-auto space-y-3">
+            <div className="">
                 {user && isLoading ? <>Loading documents <Loader/></>: <> {documents ? documents.map((d) => (
                     <div key={d.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                         <input 
@@ -117,7 +116,7 @@ const DocumentsList = ({setSelectedDocuments,selectedDocuments}:DocumentsListPro
                     {user ? (
                        
                             <Button 
-                                disabled={false}
+                                disabled={false || documentState.length < 1}
                                 onClick={handleSubmit}
                                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all"
                             >
