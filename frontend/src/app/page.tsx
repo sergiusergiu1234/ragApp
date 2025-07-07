@@ -84,6 +84,12 @@ export default function Home() {
                     <SidebarTrigger />
                     <span className="text-lg font-semibold text-gray-800"></span>
                 </div>
+                <Button asChild variant="outline">
+                    <a href="/auth/login">
+                      <FcGoogle />
+                      Log in
+                    </a>
+                  </Button>
             </div>
 
 

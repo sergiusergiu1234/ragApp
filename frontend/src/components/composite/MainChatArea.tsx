@@ -20,9 +20,15 @@ const MainChatArea = ({user, selectedConversationId, isUploading, mergedMessages
         <MessageList selectedConversationTitle={selectedConversationTitle} isUploading={isUploading} messages={mergedMessages} />
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center">
-          <label className="text-4xl font-semibold text-gray-700 mb-8">
-            Welcome {user ? (user.given_name || user.email) : "friend"}. Try the chat.
+          <label className="text-xl font-semibold text-gray-700 mb-8 sm:text-4xl">
+            Welcome. {user ? (user.given_name || user.email) : ""} Try the chat.
           </label>
+          <Button asChild variant="outline">
+                    <a href="/auth/login">
+                      <FcGoogle />
+                      Log in
+                    </a>
+                  </Button>
         </div>
       )}
     </div>
